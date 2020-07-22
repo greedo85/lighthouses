@@ -1,0 +1,30 @@
+Zdefiniuj w Javie strukturê danych odpowiadaj¹c¹ planszy z lewej strony obrazka.
+Ustaw latarnie, zdefiniuj ile statków powinno znajdowaæ siê w jej zasiêgu. Na sztywno (rêcznie) ustaw.
+
+Napisz algorytm rozgrywki:
+- rozgrywka ma siê odbywaæ w konsoli   (scanner + system.out.println)
+- start gry
+- mo¿liwoœæ ustawienia statku na planszy
+- sprawdzaj wszystkie wymagane warunki, które musz¹ byæ spe³nione, aby statek postawiæ na danym polu
+- po ustawieniu wszytkich statków, wyœwietl komunikat o zakoñczeniu gry.
+  Komunikat powinien pojawiæ siê automatycznie, po ustawieniu wszystkich statków.
+- oblicz czas rozgrywki
+
+Warunki:
+1. zapisanie tablicy latarniami z ich wartoœciami
+2. zapisanie pustych pól znakiem
+3. dla latarni trzeba robiæ Integer.parseInt, ¿eby sprawdziæ wartoœæ w kolumnie i rzêdzie
+4. po wpisaniu przez u¿ytkownika koordynatów pola, trzeba sprawdziæ nastêpuj¹ce rzeczy:
+- czy na polu jest ju¿ statek lub latarnia
+    * je¿eli pole jest puste (=='_'):
+       -sprawdŸ czy na polach wokó³ jest statek lub latarnia
+    * je¿eli nie jest puste lub wokó³ s¹ statki lub latarnie:
+       - spróbuj ponownie i znowu sprawdŸ pola wokó³
+    * je¿eli pole jest puste i wokó³ nie ma statków ani latarni, sprawdŸ czy kolumny na krzy¿ od postawionego statku
+      maj¹ conajmniej wartoœæ >=1
+        - je¿eli tak zapisz to pole 
+        - je¿eli nie, spróbuj ponownie zapisaæ rz¹d i kolumnê
+Trzeba liczyæ jakoœ statki (natrafisz na x dla pola z wartoœci¹, policz w górê i w dó³ statki)
+jeœli powy¿sze warunki s¹ spe³nione i da siê postawiæ statek.
+
+5. Jeœli powy¿sze przejdzie, idŸ dalej
