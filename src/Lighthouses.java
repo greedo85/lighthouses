@@ -63,6 +63,7 @@ public class Lighthouses {
         int indexNumberRow;
         int indexNumberColumn;
         char quit='q';
+        System.out.println("Wpisz 'q' aby zakoñczyæ grê, lub 'n' aby kontynuowaæ");
         while ((quit=key.next().charAt(0))!='q') {
             try {
                 System.out.print("Rz¹d:");
