@@ -1,4 +1,4 @@
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -58,41 +58,49 @@ public class Lighthouses {
     }
 
     public void putShips( char[][] tab ) {
+        boolean check = false;
         System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
         int indexNumberRow;
         int indexNumberColumn;
-        for (int k = 0; k < 3; k++) {
+        char quit='q';
+        while ((quit=key.next().charAt(0))!='q') {
             try {
                 System.out.print("Rz¹d:");
                 indexNumberRow = key.nextInt();
                 System.out.print("Kolumna:");
                 indexNumberColumn = key.nextInt();
-                boolean check = false;
                 /* idziemy po ca³ej tablicy, jeœli tablica indexRow-1 indexColumn-1 itd jest ró¿na od '_' */
                 //if (indexNumberRow > 0 && indexNumberRow < tab.length - 1 && indexNumberColumn > 0 && indexNumberColumn < tab.length - 1) {
+                int j;
                 for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
-                    for (int j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
-                        System.out.print(tab[i][j] + " ");
+                    for ( j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
+                        /*System.out.print(tab[i][j] + " ");*/
                         if (tab[i][j] == '_') {
                             check = true;
                         } else {
-                            check = false;
                             System.out.println("Spróbuj jeszcze raz:");
-                            k = 0;
-                            break;
+                            printBoard(board);
+                            check = false;
+                            putShips(board);
                         }
                     }
                 }
-
-                if (check) {
+                if (check==true) {
                     tab[indexNumberRow][indexNumberColumn] = 'x';
                 }
+                printBoard(board);
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
-                k = 0;
-                key.nextInt();
+                putShips(board);
             }
         }
+    }
+    public void removeShip(char[][]tab)
+    {
+        System.out.println("Zdejmij statek, podaj rz¹d i kolumnê:");
+        int indexNumberRow;
+        int indexNumberColumn;
+
     }
 
 
