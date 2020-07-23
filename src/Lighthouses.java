@@ -20,7 +20,6 @@ public class Lighthouses {
         System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
         lighthouses.printBoard(lighthouses.board);
         lighthouses.putShips(lighthouses.board);
-
     }
     public void printBoard(char board[][])
     {
@@ -63,15 +62,17 @@ public class Lighthouses {
         int indexNumberRow;
         int indexNumberColumn;
         char quit='q';
-        System.out.println("Wpisz 'q' aby zakoñczyæ grê, lub 'n' aby kontynuowaæ");
         while ((quit=key.next().charAt(0))!='q') {
+            System.out.println("Wpisz 'q' aby zakoñczyæ grê, lub 'z' aby zdj¹æ statek");
+            if(quit=='z')
+            {
+                removeShip(board);
+            }
             try {
                 System.out.print("Rz¹d:");
                 indexNumberRow = key.nextInt();
                 System.out.print("Kolumna:");
                 indexNumberColumn = key.nextInt();
-                /* idziemy po ca³ej tablicy, jeœli tablica indexRow-1 indexColumn-1 itd jest ró¿na od '_' */
-                //if (indexNumberRow > 0 && indexNumberRow < tab.length - 1 && indexNumberColumn > 0 && indexNumberColumn < tab.length - 1) {
                 int j;
                 for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
                     for ( j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
@@ -101,35 +102,22 @@ public class Lighthouses {
         System.out.println("Zdejmij statek, podaj rz¹d i kolumnê:");
         int indexNumberRow;
         int indexNumberColumn;
-
-    }
-
-
-    /*public void putShipsCoordinates(char tab[][]) throws ArrayIndexOutOfBoundsException
-    {
-        System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
-        for (int i=0;i<8;i++)
+        try
         {
-            int indexNumber1;
-            int indexNumber2;
-            System.out.print("Rz¹d:");
-            while((indexNumber1=key.nextInt())>=tab.length) {
-                System.out.println("Poza zakresem tablicy, spróbuj ponownie");
-            }
-            System.out.print("Kolumna:");
-            try
+            System.out.println("Rz¹d:");
+            indexNumberRow=key.nextInt();
+            System.out.println("Kolumna:");
+            indexNumberColumn=key.nextInt();
+            if(tab[indexNumberRow][indexNumberColumn]=='x')
             {
-                while (tab[indexNumber1][indexNumber2=key.nextInt()] != '_' ||
-                       tab[indexNumber1][indexNumber2 - 1] != '_' ||
-                       tab[indexNumber1][indexNumber2 + 1] != '_' ) {
-                       System.out.println("Trafi³eœ w latarniê lub siê zbli¿y³eœ do niej albo innego statku\npodaj inny index:");
-                }
-                tab[indexNumber1][indexNumber2] = 'x';
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Poza zakresem rzêdu, spróbuj ponownie");
-                key.nextInt();
+                board[indexNumberRow][indexNumberColumn]='_';
+                System.out.println("Zdj¹³em statek z:["+indexNumberRow+"] ["+indexNumberColumn);
             }
         }
-    }*/
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
+            removeShip(board);
+        }
+    }
 }
