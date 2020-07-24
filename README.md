@@ -2,7 +2,7 @@
 Andrzej Kuczmierowski
 
 # Project
-Kurs <a href="http://szymonleyk.pl/">Szymon Leyk</a> 
+Kurs [Szymon Leyk](https://szymonleyk.pl)
 
 # Licence
 MIT

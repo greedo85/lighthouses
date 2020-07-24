@@ -13,6 +13,7 @@ public class Lighthouses {
     Scanner key = new Scanner(System.in);
 
     public static void main( String[] args ) {
+        Scanner key = new Scanner(System.in);
         Lighthouses lighthouses = new Lighthouses();
         lighthouses.setBoard();
         System.out.println("Tak wygl¹da tablica do której trzeba wstawiæ statki:");
@@ -20,9 +21,9 @@ public class Lighthouses {
         System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
         lighthouses.printBoard(lighthouses.board);
         lighthouses.putShips(lighthouses.board);
+
     }
-    public void printBoard(char board[][])
-    {
+    public void printBoard( char board[][] ) {
         System.out.println("    1  2  3  4  5  6  7  8  9  10 ");
         for (int i = 1; i < board.length - 1; i++) {
             if (i < 10) {
@@ -59,65 +60,94 @@ public class Lighthouses {
     public void putShips( char[][] tab ) {
         boolean check = false;
         System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
+        System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê");
+        char quit = key.next().charAt(0);
+        if (quit == 'z') {
+            removeShip(board);
+        }
+        else if (quit == 's') {
+            checkLighthouses(board);
+            putShips(board);
+        }
+        else if(quit=='q')
+        {
+            System.exit(0);
+        }
+
         int indexNumberRow;
         int indexNumberColumn;
-        char quit='q';
-        while ((quit=key.next().charAt(0))!='q') {
-            System.out.println("Wpisz 'q' aby zakoñczyæ grê, lub 'z' aby zdj¹æ statek");
-            if(quit=='z')
-            {
-                removeShip(board);
-            }
-            try {
-                System.out.print("Rz¹d:");
-                indexNumberRow = key.nextInt();
-                System.out.print("Kolumna:");
-                indexNumberColumn = key.nextInt();
-                int j;
-                for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
-                    for ( j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
-                        /*System.out.print(tab[i][j] + " ");*/
-                        if (tab[i][j] == '_') {
-                            check = true;
-                        } else {
-                            System.out.println("Spróbuj jeszcze raz:");
-                            printBoard(board);
-                            check = false;
-                            putShips(board);
-                        }
+        try {
+            System.out.print("Rz¹d:");
+            indexNumberRow = key.nextInt();
+            System.out.print("Kolumna:");
+            indexNumberColumn = key.nextInt();
+            int j;
+            for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
+                for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
+                    /*System.out.print(tab[i][j] + " ");*/
+                    if (tab[i][j] == '_') {
+                        check = true;
+                    } else {
+                        System.out.println("Spróbuj jeszcze raz:");
+                        printBoard(board);
+                        check = false;
+                        putShips(board);
                     }
                 }
-                if (check==true) {
-                    tab[indexNumberRow][indexNumberColumn] = 'x';
-                }
+            }
+            if (check == true) {
+                tab[indexNumberRow][indexNumberColumn] = 'x';
                 printBoard(board);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
                 putShips(board);
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
+            putShips(board);
         }
     }
-    public void removeShip(char[][]tab)
-    {
+
+    public void removeShip( char[][] tab ) {
         System.out.println("Zdejmij statek, podaj rz¹d i kolumnê:");
         int indexNumberRow;
         int indexNumberColumn;
-        try
-        {
+        try {
             System.out.println("Rz¹d:");
-            indexNumberRow=key.nextInt();
+            indexNumberRow = key.nextInt();
             System.out.println("Kolumna:");
-            indexNumberColumn=key.nextInt();
-            if(tab[indexNumberRow][indexNumberColumn]=='x')
-            {
-                board[indexNumberRow][indexNumberColumn]='_';
-                System.out.println("Zdj¹³em statek z:["+indexNumberRow+"] ["+indexNumberColumn);
+            indexNumberColumn = key.nextInt();
+            if (tab[indexNumberRow][indexNumberColumn] == 'x') {
+                board[indexNumberRow][indexNumberColumn] = '_';
+                System.out.println("Zdj¹³em statek z:[" + indexNumberRow + "] [" + indexNumberColumn);
             }
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
             removeShip(board);
         }
+        putShips(board);
+    }
+
+    public void /*boolean*/ checkLighthouses( char[][] tab ) {
+        int counter = 0;
+        int lighthouseCounter;
+        for (int i = 1; i < tab.length - 1; i++) {
+            for (int j = 1; j < tab[i].length - 1; j++) {
+                if (tab[i][j] != '_' && tab[i][j] != 'x') {
+                    int currentIndex = j;
+                    System.out.println("Latarnia:" + tab[i][j]);
+                    String indexValue = String.valueOf(tab[i][j]);
+                    lighthouseCounter = Integer.parseInt(indexValue);
+                    /* Tu mamy ju¿ zapisan¹ wartoœæ latarni, teraz trzeba sprawdziæ w przód i ty³ czy dla tej wartoœci nie ma wiêcej
+                     * ni¿ mo¿na postawiæ w rzêdzie przód-ty³ i góra-dó³*/
+                    for (int k = 0; k < tab[j].length - 1; k++) {
+                        if (tab[j][k] == 'x') {
+                            counter += 1;
+                        }
+                        System.out.println("podtablica: " + tab[j][k]);
+                    }
+                }
+            }
+        }
+        System.out.println("Liczba xów dla latarni" + counter);
+        putShips(board);
     }
 }
