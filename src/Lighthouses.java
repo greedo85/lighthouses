@@ -1,12 +1,11 @@
 
-
 import java.util.Arrays;
 import java.util.Scanner;
 
-/* ogólnie jeœli user wybierze pole z latarni¹ to nie mo¿na mu na to pozwoliæ, czyli jeœli wstawi jedynkê
- * w pole z latarni¹ musi wyst¹piæ wyj¹tek (jeœli pole do wstawienia statku bêdzie ró¿ne od null)
+/* ogólnie jeœli user wybierze pole z latarni¹ to nie mo¿na mu na to pozwoliæ, czyli jeœli wstawi statek
+ * w pole z latarni¹ musi wyst¹piæ wyj¹tek (jeœli pole do wstawienia statku bêdzie ró¿ne od '_'')
  * trzeba bêdzie parstowaæ zapisane pola na int ¿eby sprawdziæ ile statków oœwietl¹
- * trzeba zabroniæ userowi wpisania innego chara ni¿ '1'*/
+ * trzeba zabroniæ userowi wpisania innego znaku ni¿ int*/
 public class Lighthouses {
 
     char board[][] = new char[12][12];
@@ -21,8 +20,8 @@ public class Lighthouses {
         System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
         lighthouses.printBoard(lighthouses.board);
         lighthouses.putShips(lighthouses.board);
-
     }
+
     public void printBoard( char board[][] ) {
         System.out.println("    1  2  3  4  5  6  7  8  9  10 ");
         for (int i = 1; i < board.length - 1; i++) {
@@ -37,6 +36,7 @@ public class Lighthouses {
             System.out.println(" ");
         }
     }
+
     public void setBoard() {
         board[1][1] = '1';
         board[1][10] = '2';
@@ -60,49 +60,47 @@ public class Lighthouses {
     public void putShips( char[][] tab ) {
         boolean check = false;
         System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
-        System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê");
+        System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê\n'd'aby iœæ dalej");
         char quit = key.next().charAt(0);
         if (quit == 'z') {
             removeShip(board);
-        }
-        else if (quit == 's') {
+        } else if (quit == 's') {
             checkLighthouses(board);
             putShips(board);
-        }
-        else if(quit=='q')
-        {
+        } else if (quit == 'q') {
             System.exit(0);
         }
-
-        int indexNumberRow;
-        int indexNumberColumn;
-        try {
-            System.out.print("Rz¹d:");
-            indexNumberRow = key.nextInt();
-            System.out.print("Kolumna:");
-            indexNumberColumn = key.nextInt();
-            int j;
-            for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
-                for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
-                    /*System.out.print(tab[i][j] + " ");*/
-                    if (tab[i][j] == '_') {
-                        check = true;
-                    } else {
-                        System.out.println("Spróbuj jeszcze raz:");
-                        printBoard(board);
-                        check = false;
-                        putShips(board);
+        else if(quit=='d') {
+            int indexNumberRow;
+            int indexNumberColumn;
+            try {
+                System.out.print("Rz¹d:");
+                indexNumberRow = key.nextInt();
+                System.out.print("Kolumna:");
+                indexNumberColumn = key.nextInt();
+                int j;
+                for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
+                    for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
+                        /*System.out.print(tab[i][j] + " ");*/
+                        if (tab[i][j] == '_') {
+                            check = true;
+                        } else {
+                            System.out.println("Spróbuj jeszcze raz:");
+                            printBoard(board);
+                            check = false;
+                            putShips(board);
+                        }
                     }
                 }
-            }
-            if (check == true) {
-                tab[indexNumberRow][indexNumberColumn] = 'x';
-                printBoard(board);
+                if (check == true) {
+                    tab[indexNumberRow][indexNumberColumn] = 'x';
+                    printBoard(board);
+                    putShips(board);
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
                 putShips(board);
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Poza zakresem tablicy, spróbuj jeszcze raz");
-            putShips(board);
         }
     }
 
@@ -126,28 +124,47 @@ public class Lighthouses {
         putShips(board);
     }
 
-    public void /*boolean*/ checkLighthouses( char[][] tab ) {
-        int counter = 0;
-        int lighthouseCounter;
+    /* ta metoda musi porównywaæ czy dla ka¿dej latarni zgadza siê liczba uzyskana z policzenia x-ów*/
+    public void  checkLighthouses( char[][] tab ) {
+        boolean winOrNot = false;
         for (int i = 1; i < tab.length - 1; i++) {
             for (int j = 1; j < tab[i].length - 1; j++) {
                 if (tab[i][j] != '_' && tab[i][j] != 'x') {
-                    int currentIndex = j;
                     System.out.println("Latarnia:" + tab[i][j]);
                     String indexValue = String.valueOf(tab[i][j]);
-                    lighthouseCounter = Integer.parseInt(indexValue);
+                    int lighthouseValue = Integer.parseInt(indexValue);
+                    int counter = 0;
                     /* Tu mamy ju¿ zapisan¹ wartoœæ latarni, teraz trzeba sprawdziæ w przód i ty³ czy dla tej wartoœci nie ma wiêcej
                      * ni¿ mo¿na postawiæ w rzêdzie przód-ty³ i góra-dó³*/
-                    for (int k = 0; k < tab[j].length - 1; k++) {
-                        if (tab[j][k] == 'x') {
+                    /*przechodzenie rzêdu poziomo*/
+                    for (int k = 0; k < tab[i].length ; k++) {
+                        if (tab[i][k] == 'x') {
                             counter += 1;
                         }
-                        System.out.println("podtablica: " + tab[j][k]);
+                    }
+                    /*przechodzenie rzêdu pionowo*/
+                    for (int l = 0; l < tab[i].length ; l++) {
+                        if (tab[l][j] == 'x') {
+                            counter += 1;
+                        }
+                    }
+                    System.out.println("Iloœæ statków"+counter);
+                    if (counter == lighthouseValue) {
+                        winOrNot = true;
+
+                    } else {
+                        winOrNot = false;
+                        System.out.println("Popraw ustawienie statków "+tab[i][j]+ " licznik: "+counter);
+                        putShips(board);
                     }
                 }
             }
+
         }
-        System.out.println("Liczba xów dla latarni" + counter);
+        if (winOrNot == true) {
+            System.out.println("Wygra³eœ");
+            System.exit(0);
+        }
         putShips(board);
     }
 }
