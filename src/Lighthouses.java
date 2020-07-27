@@ -1,26 +1,25 @@
-
-import java.util.Arrays;
 import java.util.Scanner;
 
 /* ogólnie jeœli user wybierze pole z latarni¹ to nie mo¿na mu na to pozwoliæ, czyli jeœli wstawi statek
- * w pole z latarni¹ musi wyst¹piæ wyj¹tek (jeœli pole do wstawienia statku bêdzie ró¿ne od '_'')
+ * w pole z latarni¹ musi wyst¹piæ wyj¹tek (jeœli pole do wstawienia statku bêdzie ró¿ne od EMPTY')
  * trzeba bêdzie parstowaæ zapisane pola na int ¿eby sprawdziæ ile statków oœwietl¹
  * trzeba zabroniæ userowi wpisania innego znaku ni¿ int*/
 public class Lighthouses {
+    private final char EMPTY = '_';
+    private final char SHIP = 'x';
 
     char board[][] = new char[12][12];
     Scanner key = new Scanner(System.in);
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         Scanner key = new Scanner(System.in);
         Lighthouses lighthouses = new Lighthouses();
         lighthouses.setBoard();
         System.out.println("Tak wygl¹da plansza do której trzeba wstawiæ statki:");
-        System.out.println("'_' - to puste pole na którym mo¿na ustawiæ statek.");
+        System.out.println("EMPTY - to puste pole na którym mo¿na ustawiæ statek.");
         System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
         lighthouses.printBoard();
         lighthouses.menu();
-       // lighthouses.putShips();
     }
 
     public void printBoard() {
@@ -52,11 +51,12 @@ public class Lighthouses {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 0) {
-                    board[i][j] = '_';
+                    board[i][j] = EMPTY;
                 }
             }
         }
     }
+
     public void menu() {
         System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
         System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê\n'd' aby iœæ dalej");
@@ -78,40 +78,41 @@ public class Lighthouses {
                 putShips();
         }
     }
+
     public void putShips() {
         boolean checkIndexAvailability = false;
 
-                int indexNumberRow;
-                int indexNumberColumn;
-                try {
-                    System.out.print("Rz¹d:");
-                    indexNumberRow = key.nextInt();
-                    System.out.print("Kolumna:");
-                    indexNumberColumn = key.nextInt();
-                    int j;
-                    for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
-                        for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
-                            /*System.out.print(board[i][j] + " ");*/
-                            if (board[i][j] == '_') {
-                                checkIndexAvailability = true;
+        int indexNumberRow;
+        int indexNumberColumn;
+        try {
+            System.out.print("Rz¹d:");
+            indexNumberRow = key.nextInt();
+            System.out.print("Kolumna:");
+            indexNumberColumn = key.nextInt();
+            int j;
+            for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
+                for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
+                    /*System.out.print(board[i][j] + " ");*/
+                    if (board[i][j] == EMPTY) {
+                        checkIndexAvailability = true;
 
-                            } else {
-                                System.out.println("Spróbuj jeszcze raz:");
-                                printBoard();
-                                checkIndexAvailability = false;
-                                putShips();
-                            }
-                        }
-                    }
-                    if (checkIndexAvailability == true) {
-                        board[indexNumberRow][indexNumberColumn] = 'x';
+                    } else {
+                        System.out.println("Spróbuj jeszcze raz:");
                         printBoard();
-                        menu();
+                        checkIndexAvailability = false;
+                        putShips();
                     }
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("Poza plansz¹, spróbuj jeszcze raz");
-                    putShips();
                 }
+            }
+            if (checkIndexAvailability == true) {
+                board[indexNumberRow][indexNumberColumn] = SHIP;
+                printBoard();
+                menu();
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Poza plansz¹, spróbuj jeszcze raz");
+            putShips();
+        }
 
 
     }
@@ -125,8 +126,8 @@ public class Lighthouses {
             indexNumberRow = key.nextInt();
             System.out.println("Kolumna:");
             indexNumberColumn = key.nextInt();
-            if (board[indexNumberRow][indexNumberColumn] == 'x') {
-                board[indexNumberRow][indexNumberColumn] = '_';
+            if (board[indexNumberRow][indexNumberColumn] == SHIP) {
+                board[indexNumberRow][indexNumberColumn] = EMPTY;
                 System.out.println("Zdj¹³em statek z:[" + indexNumberRow + "] [" + indexNumberColumn);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -141,7 +142,7 @@ public class Lighthouses {
         boolean win = false;
         for (int i = 1; i < board.length - 1; i++) {
             for (int j = 1; j < board[i].length - 1; j++) {
-                if (board[i][j] != '_' && board[i][j] != 'x') {
+                if (board[i][j] != EMPTY && board[i][j] != SHIP) {
                     System.out.println("Latarnia:" + board[i][j]);
                     String indexValue = String.valueOf(board[i][j]);
                     int lighthouseValue = Integer.parseInt(indexValue);
@@ -150,14 +151,14 @@ public class Lighthouses {
                      * ni¿ mo¿na postawiæ w rzêdzie przód-ty³ i góra-dó³*/
                     /*przechodzenie rzêdu poziomo*/
                     for (int k = 0; k < board[i].length; k++) {
-                        if (board[i][k] == 'x') {
-                            counter += 1;
+                        if (board[i][k] == SHIP) {
+                            counter++;
                         }
                     }
                     /*przechodzenie kolumny pionowo*/
                     for (int l = 0; l < board[i].length; l++) {
-                        if (board[l][j] == 'x') {
-                            counter += 1;
+                        if (board[l][j] == SHIP) {
+                            counter++;
                         }
                     }
                     System.out.println("Iloœæ statków" + counter);
