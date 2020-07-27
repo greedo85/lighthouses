@@ -8,17 +8,19 @@ public class Lighthouses {
     private final char EMPTY = '_';
     private final char SHIP = 'x';
 
-    char board[][] = new char[12][12];
-    Scanner key = new Scanner(System.in);
+    private char board[][];
+    private Scanner key = new Scanner(System.in);
+
+    public Lighthouses(int size) {
+        board = new char[size][size];
+        setBoard();
+    }
 
     public static void main(String[] args) {
-        Scanner key = new Scanner(System.in);
-        Lighthouses lighthouses = new Lighthouses();
-        lighthouses.setBoard();
+        Lighthouses lighthouses = new Lighthouses(12);
         System.out.println("Tak wygl¹da plansza do której trzeba wstawiæ statki:");
-        System.out.println("EMPTY - to puste pole na którym mo¿na ustawiæ statek.");
+        System.out.println("'_' - to puste pole na którym mo¿na ustawiæ statek.");
         System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
-        lighthouses.printBoard();
         lighthouses.menu();
     }
 
@@ -58,30 +60,33 @@ public class Lighthouses {
     }
 
     public void menu() {
-        System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
-        System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê\n'd' aby iœæ dalej");
-        char quit = key.next().charAt(0);
-        switch (quit) {
-            case 'z':
-                removeShip();
-                break;
-            case 's':
-                checkLighthouses();
-                putShips();
-                break;
-            case 'q':
-                System.exit(0);
-            case 'd':
-                putShips();
-                break;
-            default:
-                putShips();
-        }
+        boolean win = false;
+        do {
+            printBoard();
+            System.out.println("Wybierz jedn¹ z opcji: ");
+            System.out.println("'w' - wstaw statek");
+            System.out.println("'z' - zdejmij statek");
+            System.out.println("'s' - sprawdŸ czy wygra³eœ");
+            System.out.println("'q' - zakoñcz grê");
+            char quit = key.next().charAt(0);
+
+            switch (quit) {
+                case 'w':
+                    putShips();
+                    break;
+                case 'z':
+                    removeShip();
+                    break;
+                case 's':
+                    win = checkLighthouses();
+                    break;
+                case 'q':
+                    System.exit(0);
+            }
+        } while (!win);
     }
 
     public void putShips() {
-        boolean checkIndexAvailability = false;
-
         int indexNumberRow;
         int indexNumberColumn;
         try {
@@ -89,32 +94,27 @@ public class Lighthouses {
             indexNumberRow = key.nextInt();
             System.out.print("Kolumna:");
             indexNumberColumn = key.nextInt();
-            int j;
-            for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
-                for (j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
-                    /*System.out.print(board[i][j] + " ");*/
-                    if (board[i][j] == EMPTY) {
-                        checkIndexAvailability = true;
 
-                    } else {
-                        System.out.println("Spróbuj jeszcze raz:");
-                        printBoard();
-                        checkIndexAvailability = false;
-                        putShips();
-                    }
-                }
-            }
-            if (checkIndexAvailability == true) {
+            if (isIndexAvailabilty(indexNumberRow, indexNumberColumn)) {
                 board[indexNumberRow][indexNumberColumn] = SHIP;
-                printBoard();
-                menu();
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Poza plansz¹, spróbuj jeszcze raz");
-            putShips();
         }
 
 
+    }
+
+    private boolean isIndexAvailabilty(int indexNumberRow, int indexNumberColumn) {
+        for (int i = indexNumberRow - 1; i <= indexNumberRow + 1; i++) {
+            for (int j = indexNumberColumn - 1; j <= indexNumberColumn + 1; j++) {
+                if (board[i][j] != EMPTY) {
+                    System.out.println("Spróbuj jeszcze raz.");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void removeShip() {
@@ -131,15 +131,12 @@ public class Lighthouses {
                 System.out.println("Zdj¹³em statek z:[" + indexNumberRow + "] [" + indexNumberColumn);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Poza plansz¹, spróbuj jeszcze raz");
-            removeShip();
+            System.out.println("Poza plansz¹, spróbuj jeszcze raz.");
         }
-        putShips();
     }
 
     /* ta metoda musi porównywaæ czy dla ka¿dej latarni zgadza siê liczba uzyskana z policzenia x-ów*/
-    public void checkLighthouses() {
-        boolean win = false;
+    public boolean checkLighthouses() {
         for (int i = 1; i < board.length - 1; i++) {
             for (int j = 1; j < board[i].length - 1; j++) {
                 if (board[i][j] != EMPTY && board[i][j] != SHIP) {
@@ -162,22 +159,15 @@ public class Lighthouses {
                         }
                     }
                     System.out.println("Iloœæ statków" + counter);
-                    if (counter == lighthouseValue) {
-                        win = true;
-
-                    } else {
-                        win = false;
+                    if (counter != lighthouseValue) {
                         System.out.println("Popraw ustawienie statków " + board[i][j] + " licznik: " + counter);
-                        putShips();
+                        return false;
                     }
                 }
             }
+        }
 
-        }
-        if (win == true) {
-            System.out.println("Wygra³eœ");
-            System.exit(0);
-        }
-        putShips();
+        System.out.println("Wygra³eœ");
+        return true;
     }
 }
