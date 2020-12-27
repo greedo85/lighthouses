@@ -1,9 +1,6 @@
 import java.util.Scanner;
 
-/* ogólnie jeœli user wybierze pole z latarni¹ to nie mo¿na mu na to pozwoliæ, czyli jeœli wstawi statek
- * w pole z latarni¹ musi wyst¹piæ wyj¹tek (jeœli pole do wstawienia statku bêdzie ró¿ne od EMPTY')
- * trzeba bêdzie parstowaæ zapisane pola na int ¿eby sprawdziæ ile statków oœwietl¹
- * trzeba zabroniæ userowi wpisania innego znaku ni¿ int*/
+
 public class Lighthouses {
     private final char EMPTY = '_';
     private final char SHIP = 'x';
@@ -12,7 +9,7 @@ public class Lighthouses {
     Scanner key = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner key = new Scanner(System.in);
+
         Lighthouses lighthouses = new Lighthouses();
         lighthouses.setBoard();
         System.out.println("Tak wygl¹da plansza do której trzeba wstawiæ statki:");
