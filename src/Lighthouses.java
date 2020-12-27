@@ -134,7 +134,7 @@ public class Lighthouses {
         putShips();
     }
 
-    /* ta metoda musi porównywaæ czy dla ka¿dej latarni zgadza siê liczba uzyskana z policzenia x-ów*/
+    
     public void checkLighthouses() {
         boolean win = false;
         for (int i = 1; i < board.length - 1; i++) {
@@ -144,15 +144,13 @@ public class Lighthouses {
                     String indexValue = String.valueOf(board[i][j]);
                     int lighthouseValue = Integer.parseInt(indexValue);
                     int counter = 0;
-                    /* Tu mamy ju¿ zapisan¹ wartoœæ latarni, teraz trzeba sprawdziæ w przód i ty³ czy dla tej wartoœci nie ma wiêcej
-                     * ni¿ mo¿na postawiæ w rzêdzie przód-ty³ i góra-dó³*/
-                    /*przechodzenie rzêdu poziomo*/
+
                     for (int k = 0; k < board[i].length; k++) {
                         if (board[i][k] == SHIP) {
                             counter++;
                         }
                     }
-                    /*przechodzenie kolumny pionowo*/
+
                     for (int l = 0; l < board[i].length; l++) {
                         if (board[l][j] == SHIP) {
                             counter++;
