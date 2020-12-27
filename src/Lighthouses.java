@@ -12,9 +12,9 @@ public class Lighthouses {
 
         Lighthouses lighthouses = new Lighthouses();
         lighthouses.setBoard();
-        System.out.println("Tak wygl¹da plansza do której trzeba wstawiæ statki:");
-        System.out.println("EMPTY - to puste pole na którym mo¿na ustawiæ statek.");
-        System.out.println("Cyfra w polu oznacza ile s¹siednich pól w pionie i poziomie oœwietla latarnia");
+        System.out.println("Tak wyglÄ…da plansza do ktÃ³rej trzeba wstawiÄ‡ statki:");
+        System.out.println("EMPTY - to puste pole na ktÃ³rym moÅ¼na ustawiÄ‡ statek.");
+        System.out.println("Cyfra w polu oznacza ile sÄ…siednich pÃ³l w pionie i poziomie oÅ›wietla latarnia");
         lighthouses.printBoard();
         lighthouses.menu();
     }
@@ -55,8 +55,8 @@ public class Lighthouses {
     }
 
     public void menu() {
-        System.out.println("Podaj koordynaty komórki w któr¹ chcesz wstawiæ statek:");
-        System.out.println("Wpisz 'q' aby zakoñczyæ grê, 'z' aby zdj¹æ statek, 's' aby sprawdziæ planszê\n'd' aby iœæ dalej");
+        System.out.println("Podaj koordynaty komÃ³rki w ktÃ³rÄ… chcesz wstawiÄ‡ statek:");
+        System.out.println("Wpisz 'q' aby zakoÅ„czyÄ‡ grÄ™, 'z' aby zdjÄ…Ä‡ statek, 's' aby sprawdziÄ‡ planszÄ™\n'd' aby iÅ›Ä‡ dalej");
         char quit = key.next().charAt(0);
         switch (quit) {
             case 'z':
@@ -82,7 +82,7 @@ public class Lighthouses {
         int indexNumberRow;
         int indexNumberColumn;
         try {
-            System.out.print("Rz¹d:");
+            System.out.print("RzÄ…d:");
             indexNumberRow = key.nextInt();
             System.out.print("Kolumna:");
             indexNumberColumn = key.nextInt();
@@ -94,7 +94,7 @@ public class Lighthouses {
                         checkIndexAvailability = true;
 
                     } else {
-                        System.out.println("Spróbuj jeszcze raz:");
+                        System.out.println("SprÃ³buj jeszcze raz:");
                         printBoard();
                         checkIndexAvailability = false;
                         putShips();
@@ -107,7 +107,7 @@ public class Lighthouses {
                 menu();
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Poza plansz¹, spróbuj jeszcze raz");
+            System.out.println("Poza planszÄ…, sprÃ³buj jeszcze raz");
             putShips();
         }
 
@@ -115,20 +115,20 @@ public class Lighthouses {
     }
 
     public void removeShip() {
-        System.out.println("Zdejmij statek, podaj rz¹d i kolumnê:");
+        System.out.println("Zdejmij statek, podaj rzÄ…d i kolumnÄ™:");
         int indexNumberRow;
         int indexNumberColumn;
         try {
-            System.out.println("Rz¹d:");
+            System.out.println("RzÄ…d:");
             indexNumberRow = key.nextInt();
             System.out.println("Kolumna:");
             indexNumberColumn = key.nextInt();
             if (board[indexNumberRow][indexNumberColumn] == SHIP) {
                 board[indexNumberRow][indexNumberColumn] = EMPTY;
-                System.out.println("Zdj¹³em statek z:[" + indexNumberRow + "] [" + indexNumberColumn);
+                System.out.println("ZdjÄ…Å‚em statek z:[" + indexNumberRow + "] [" + indexNumberColumn);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Poza plansz¹, spróbuj jeszcze raz");
+            System.out.println("Poza planszÄ…, sprÃ³buj jeszcze raz");
             removeShip();
         }
         putShips();
@@ -156,13 +156,13 @@ public class Lighthouses {
                             counter++;
                         }
                     }
-                    System.out.println("Iloœæ statków" + counter);
+                    System.out.println("IloÅ›Ä‡ statkÃ³w" + counter);
                     if (counter == lighthouseValue) {
                         win = true;
 
                     } else {
                         win = false;
-                        System.out.println("Popraw ustawienie statków " + board[i][j] + " licznik: " + counter);
+                        System.out.println("Popraw ustawienie statkÃ³w " + board[i][j] + " licznik: " + counter);
                         putShips();
                     }
                 }
@@ -170,7 +170,7 @@ public class Lighthouses {
 
         }
         if (win == true) {
-            System.out.println("Wygra³eœ");
+            System.out.println("WygraÅ‚eÅ›");
             System.exit(0);
         }
         putShips();
