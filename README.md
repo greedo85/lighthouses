@@ -2,7 +2,7 @@
 Andrzej Kuczmierowski
 
 # Project
-Kurs [Szymon Leyk](https://szymonleyk.pl)
+Gra logiczna
 
 # Licence
 MIT
